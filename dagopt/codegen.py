@@ -197,11 +197,11 @@ class CodeGenerator:
                 
         return final_instrs
 
-def optimize_block(block: BasicBlock, temp_regex: str, override_live: Set[str] = None) -> List[Instr]:
+def optimize_block(block: BasicBlock, temp_regex: str, override_live: Set[str] = None, no_fold: bool = False, no_algebra: bool = False, no_commute: bool = False) -> List[Instr]:
     from dagopt.dag import build_dag, get_live_nodes
     
     live_out = compute_live_out(block, temp_regex, override_live)
-    dag = build_dag(block.instrs)
+    dag = build_dag(block.instrs, no_fold, no_algebra, no_commute)
     
     terminator_reads = set()
     if block.terminator:

@@ -23,7 +23,7 @@ class DAG:
         self.leaf_const: Dict[int, int] = {}
         self.cse_hits: int = 0
 
-def build_dag(block_instrs: List[Instr]) -> DAG:
+def build_dag(block_instrs: List[Instr], no_fold: bool = False, no_algebra: bool = False, no_commute: bool = False) -> DAG:
     dag = DAG()
     
     def add_node(op: str, value: str | int | None, children: Tuple[int, ...]) -> int:
@@ -58,16 +58,24 @@ def build_dag(block_instrs: List[Instr]) -> DAG:
 
     for instr in block_instrs:
         if instr.kind == 'copy':
-            n = node_for(instr.a)
-            bind(instr.dest, n)
+            c = node_for(instr.a)
+            bind(instr.dest, c)
             
         elif instr.kind == 'unary':
             c = node_for(instr.a)
             
-            simplified = try_simplify(dag, 'neg', (c,))
-            if simplified is not None:
-                bind(instr.dest, simplified)
-                continue
+            if not no_fold or not no_algebra:
+                simplified = try_simplify(dag, 'neg', (c,))
+                if simplified[0]:
+                    kind, val = simplified[1]
+                    if kind == 'const' and not no_fold:
+                        n = node_for(val)
+                        bind(instr.dest, n)
+                        continue
+                    elif kind != 'const' and not no_algebra:
+                        n = val
+                        bind(instr.dest, n)
+                        continue
                 
             key = ('neg', c)
             if key in dag.table:
@@ -82,12 +90,20 @@ def build_dag(block_instrs: List[Instr]) -> DAG:
             l = node_for(instr.a)
             r = node_for(instr.b)
             
-            simplified = try_simplify(dag, instr.op, (l, r))
-            if simplified is not None:
-                bind(instr.dest, simplified)
-                continue
+            if not no_fold or not no_algebra:
+                simplified = try_simplify(dag, instr.op, (l, r))
+                if simplified[0]:
+                    kind, val = simplified[1]
+                    if kind == 'const' and not no_fold:
+                        n = node_for(val)
+                        bind(instr.dest, n)
+                        continue
+                    elif kind != 'const' and not no_algebra:
+                        n = val
+                        bind(instr.dest, n)
+                        continue
                 
-            if instr.op in ('+', '*'):
+            if not no_commute and instr.op in ('+', '*'):
                 key = (instr.op, min(l, r), max(l, r))
             else:
                 key = (instr.op, l, r)
