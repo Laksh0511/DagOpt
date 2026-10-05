@@ -1,0 +1,8 @@
+digraph DAG {
+  rankdir=BT;
+  ordering=out;
+  n0 [label="const 1 \n[a]" [shape=box]];
+  n1 [label="const 2 \n[b]" [shape=box]];
+  n2 [label="const 3 \n[c, d, e, f]" [shape=box]];
+  n3 [label="const 0" [style=dashed, color=grey, fontcolor=grey, shape=box]];
+}

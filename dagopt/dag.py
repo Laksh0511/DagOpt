@@ -22,6 +22,8 @@ class DAG:
         self.leaf_var: Dict[str, int] = {}
         self.leaf_const: Dict[int, int] = {}
         self.cse_hits: int = 0
+        self.constants_folded: int = 0
+        self.algebraic_simplifications: int = 0
 
 def build_dag(block_instrs: List[Instr], no_fold: bool = False, no_algebra: bool = False, no_commute: bool = False) -> DAG:
     dag = DAG()
@@ -69,10 +71,12 @@ def build_dag(block_instrs: List[Instr], no_fold: bool = False, no_algebra: bool
                 if simplified[0]:
                     kind, val = simplified[1]
                     if kind == 'const' and not no_fold:
+                        dag.constants_folded += 1
                         n = node_for(val)
                         bind(instr.dest, n)
                         continue
                     elif kind != 'const' and not no_algebra:
+                        dag.algebraic_simplifications += 1
                         n = val
                         bind(instr.dest, n)
                         continue
@@ -95,10 +99,12 @@ def build_dag(block_instrs: List[Instr], no_fold: bool = False, no_algebra: bool
                 if simplified[0]:
                     kind, val = simplified[1]
                     if kind == 'const' and not no_fold:
+                        dag.constants_folded += 1
                         n = node_for(val)
                         bind(instr.dest, n)
                         continue
                     elif kind != 'const' and not no_algebra:
+                        dag.algebraic_simplifications += 1
                         n = val
                         bind(instr.dest, n)
                         continue

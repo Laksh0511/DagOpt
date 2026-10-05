@@ -1,0 +1,3 @@
+block_id,instrs_before,instrs_after,arith_before,arith_after,copy_before,copy_after,dag_nodes,cse_hits,constants_folded,algebraic_simplifications,dead_nodes_removed,verification_passed
+0,6,6,4,0,2,6,4,0,4,0,1,True
+TOTAL,6,6,4,0,2,6,4,0,4,0,1,True

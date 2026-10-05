@@ -1,0 +1,33 @@
+{
+  "blocks": [
+    {
+      "block_id": 0,
+      "instrs_before": 6,
+      "instrs_after": 6,
+      "arith_before": 4,
+      "arith_after": 0,
+      "copy_before": 2,
+      "copy_after": 6,
+      "dag_nodes": 4,
+      "cse_hits": 0,
+      "constants_folded": 4,
+      "algebraic_simplifications": 0,
+      "dead_nodes_removed": 1,
+      "verification_passed": true
+    }
+  ],
+  "total": {
+    "total_instrs_before": 6,
+    "total_instrs_after": 6,
+    "total_arith_before": 4,
+    "total_arith_after": 0,
+    "total_copy_before": 2,
+    "total_copy_after": 6,
+    "total_dag_nodes": 4,
+    "total_cse_hits": 0,
+    "total_constants_folded": 4,
+    "total_algebraic_simplifications": 0,
+    "total_dead_nodes_removed": 1,
+    "total_verification_passed": true
+  }
+}
