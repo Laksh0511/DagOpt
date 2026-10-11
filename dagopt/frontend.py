@@ -1,3 +1,0 @@
-"""
-Expression Language Front End.
-"""
