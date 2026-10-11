@@ -20,8 +20,8 @@ import argparse
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 
-SEP  = "─" * 70
-SEP2 = "═" * 70
+SEP  = "-" * 70
+SEP2 = "=" * 70
 
 def hdr(title: str):
     print(f"\n{SEP2}")
@@ -36,6 +36,9 @@ def sub(title: str):
 # ── main ──────────────────────────────────────────────────────────────────────
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
     parser = argparse.ArgumentParser(description="Verbose DAG verification demo")
     parser.add_argument("tac_file", help="Input .tac file")
     parser.add_argument("--trials",  type=int, default=50,  help="Random-test trials (default 50)")

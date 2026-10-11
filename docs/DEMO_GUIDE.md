@@ -199,10 +199,10 @@ Demonstrate how the tool visually represents compiler graph structures.
 **Commands:**
 ```powershell
 # Render DAG for T01 (shows CSE sharing)
-.\.venv\Scripts\python render_dag.py tests/cases/T01.tac -o dag_T01.png
+.\.venv\Scripts\python tools/render_dag.py tests/cases/T01.tac -o dag_T01.png
 
-# Render full vs optimized DAG for test_main.tac
-.\.venv\Scripts\python render_dag.py test_main.tac --show-dead -o dag_test_main_full.png
+# Render DAG for example.tac
+.\.venv\Scripts\python tools/render_dag.py examples/example.tac -o dag_example.png
 ```
 **Visual Features to Highlight:**
 - **Shapes:** Rectangular boxes represent input leaf nodes (`var` or `const`); circles represent internal operations.
@@ -219,7 +219,7 @@ Run the dedicated diagnostic verification tool to inspect intermediate compiler 
 
 **Command:**
 ```powershell
-.\.venv\Scripts\python verify_demo.py tests/cases/T01.tac
+.\.venv\Scripts\python examples/verify_demo.py tests/cases/T01.tac
 ```
 **What the tool displays:**
 1. **Phase 1: Input TAC parsing**
@@ -237,7 +237,7 @@ Compiler optimizations must never alter program semantics. Show how DAGOpt mathe
 
 **Command:**
 ```powershell
-.\.venv\Scripts\python dagopt/main.py tests/cases/T01.tac --verify 100
+.\.venv\Scripts\python -m dagopt tests/cases/T01.tac --verify 100
 ```
 **Output:**
 ```text
@@ -251,7 +251,7 @@ Demonstrate that compiler metrics are computed dynamically and exported for data
 
 **Command:**
 ```powershell
-.\.venv\Scripts\python dagopt/main.py tests/cases/T01.tac --metrics
+.\.venv\Scripts\python -m dagopt tests/cases/T01.tac --metrics
 Get-Content metrics.csv
 ```
 **Content Displayed:**
@@ -316,10 +316,10 @@ Demonstrate project reliability and test coverage:
 
 | Task | Command (PowerShell) |
 |---|---|
-| **Run Optimizer with Metrics** | `python dagopt/main.py tests/cases/T01.tac --metrics` |
-| **Run Random Equivalence Verifier** | `python dagopt/main.py tests/cases/T01.tac --verify 100` |
-| **Export Graphviz DOT Files** | `python dagopt/main.py tests/cases/T01.tac --dot-dir ./dots` |
-| **Render Visual PNG Graph** | `python render_dag.py tests/cases/T01.tac -o dag_T01.png` |
-| **Interactive 7-Phase Demo** | `python verify_demo.py tests/cases/T01.tac` |
+| **Run Optimizer with Metrics** | `python -m dagopt tests/cases/T01.tac --metrics` |
+| **Run Random Equivalence Verifier** | `python -m dagopt tests/cases/T01.tac --verify 100` |
+| **Export Graphviz DOT Files** | `python -m dagopt tests/cases/T01.tac --dot-dir ./dots` |
+| **Render Visual PNG Graph** | `python tools/render_dag.py tests/cases/T01.tac -o dag_T01.png` |
+| **Interactive 7-Phase Demo** | `python examples/verify_demo.py tests/cases/T01.tac` |
 | **Run Full Pytest Suite** | `pytest -v` |
 | **Inspect Generated CSV** | `Get-Content metrics.csv` |

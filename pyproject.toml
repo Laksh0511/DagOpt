@@ -12,9 +12,16 @@ dependencies = [
     "graphviz",
 ]
 
+[project.scripts]
+dagopt = "dagopt.main:main"
+
 [project.optional-dependencies]
 test = [
     "pytest",
+]
+viz = [
+    "matplotlib",
+    "networkx",
 ]
 
 [tool.pytest.ini_options]

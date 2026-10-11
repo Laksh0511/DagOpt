@@ -124,8 +124,12 @@ def optimize_program(args, input_text: str):
     if args.metrics:
         if not args.quiet:
             print_metrics_table(block_metrics_list, total)
-        export_metrics_json(block_metrics_list, total, "metrics.json")
-        export_metrics_csv(block_metrics_list, total, "metrics.csv")
+        json_path = getattr(args, "metrics_json", "metrics.json")
+        csv_path = getattr(args, "metrics_csv", "metrics.csv")
+        if json_path:
+            export_metrics_json(block_metrics_list, total, json_path)
+        if csv_path:
+            export_metrics_csv(block_metrics_list, total, csv_path)
 
 def main():
     parser = argparse.ArgumentParser(description="DAG-Based Basic Block Optimizer")
@@ -140,7 +144,10 @@ def main():
     parser.add_argument("--verify", type=int, default=0, metavar="N", help="Run N random testing trials per block")
     parser.add_argument("--seed", type=int, help="Random seed for verification")
     parser.add_argument("--metrics", action="store_true", help="Collect and output metrics")
+    parser.add_argument("--metrics-json", metavar="FILE", default="metrics.json", help="Path for JSON metrics export (default: metrics.json)")
+    parser.add_argument("--metrics-csv", metavar="FILE", default="metrics.csv", help="Path for CSV metrics export (default: metrics.csv)")
     parser.add_argument("--quiet", action="store_true", help="Suppress output")
+
     
     args = parser.parse_args()
     

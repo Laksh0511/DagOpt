@@ -52,7 +52,7 @@ Each non-blank, non-comment line is one of the following forms:
 - Operands are variable names matching `[A-Za-z_][A-Za-z0-9_]*` or integer literals.
 - Lines beginning with `#` (or containing `#`) are treated as comments.
 
-**Example — `example.tac`:**
+**Example — `examples/example.tac`:**
 
 ```
 # CSE + constant folding demo
@@ -71,13 +71,15 @@ f = b + a       # commutative: same as a + b, reuses node
 ### Basic optimization (print to stdout)
 
 ```bash
-python -m dagopt example.tac
+python -m dagopt examples/example.tac
+# or using installed CLI command
+dagopt examples/example.tac
 ```
 
 ### Write optimized output to a file
 
 ```bash
-python -m dagopt example.tac -o optimized.tac
+python -m dagopt examples/example.tac -o optimized.tac
 ```
 
 ### Specify live-out variables
@@ -85,7 +87,7 @@ python -m dagopt example.tac -o optimized.tac
 By default, only non-temporary variables are kept alive. Use `--live-out` to override:
 
 ```bash
-python -m dagopt example.tac --live-out a,b,c,result
+python -m dagopt examples/example.tac --live-out a,b,c,result
 ```
 
 ### Show optimization metrics
@@ -93,7 +95,7 @@ python -m dagopt example.tac --live-out a,b,c,result
 Prints a per-block summary table and writes `metrics.json` / `metrics.csv`:
 
 ```bash
-python -m dagopt example.tac --metrics
+python -m dagopt examples/example.tac --metrics
 ```
 
 ### Export DAG visualizations (Graphviz DOT)
@@ -101,7 +103,7 @@ python -m dagopt example.tac --metrics
 Writes one `.dot` file per basic block to the specified directory:
 
 ```bash
-python -m dagopt example.tac --dot-dir ./graphs
+python -m dagopt examples/example.tac --dot-dir ./graphs
 
 # Render to PNG (requires the Graphviz `dot` binary)
 dot -Tpng graphs/block_0.dot -o graphs/block_0.png
@@ -117,8 +119,9 @@ In the DOT graph:
 Runs `N` random-input trials to check that the optimized block is semantically equivalent to the original:
 
 ```bash
-python -m dagopt example.tac --verify 100 --seed 42
+python -m dagopt examples/example.tac --verify 100 --seed 42
 ```
+
 
 ---
 
@@ -187,7 +190,7 @@ JSON and CSV copies are written to `metrics.json` and `metrics.csv` in the worki
 ## Running the Tests
 
 ```bash
-pytest            # run all 35 tests
+pytest            # run all 34 tests
 pytest -v         # verbose output
 pytest tests/test_dag.py   # single module
 ```
@@ -203,7 +206,7 @@ pytest tests/test_dag.py   # single module
 | `test_codegen.py` | Code generation, cycle breaking |
 | `test_dotexport.py` | DOT file structure validation |
 | `test_metrics.py` | Metrics dataclass and table printing |
-| `test_e2e.py` | End-to-end: optimize then verify across 15+ cases |
+| `test_e2e.py` | End-to-end: optimize and verify across static & synthetic cases |
 
 ---
 
@@ -222,16 +225,24 @@ DagOpt/
 │   ├── verify.py       # Random-input equivalence checker
 │   ├── dotexport.py    # Graphviz DOT export
 │   ├── metrics.py      # Metrics dataclass, table/CSV/JSON output
-│   ├── main.py         # CLI entry point
+│   ├── main.py         # Main optimization engine & CLI parser
+│   ├── cli.py          # CLI module forwarding to main
 │   └── __main__.py     # Enables `python -m dagopt`
 ├── tests/
 │   ├── cases/          # Hand-crafted .tac input files (T01–T07)
 │   └── test_*.py       # Pytest test modules
 ├── docs/
-│   └── DECISIONS.md    # Design decisions and assumptions
+│   ├── DECISIONS.md    # Design decisions and PRD assumptions
+│   └── DEMO_GUIDE.md   # Comprehensive walkthrough & faculty viva guide
+├── examples/
+│   ├── example.tac     # Example TAC input
+│   └── verify_demo.py  # Interactive 7-phase walkthrough script
+├── tools/
+│   └── render_dag.py   # Visual DAG PNG renderer (NetworkX + Matplotlib)
 ├── pyproject.toml
 └── README.md
 ```
+
 
 ---
 

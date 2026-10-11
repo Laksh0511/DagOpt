@@ -13,3 +13,9 @@ env/
 .idea/
 .vscode/
 examples/output/
+metrics.csv
+metrics.json
+*.dot
+dots/
+*.png
+*.gv
