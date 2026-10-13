@@ -222,7 +222,7 @@ def main():
         mpatches.Patch(color="white",   label="○ = operator   □ = var/const",
                        edgecolor="#37474F", linewidth=1),
     ]
-    ax.legend(handles=legend_patches, loc="upper right", fontsize=9, framealpha=0.9)
+    ax.legend(handles=legend_patches, loc="lower right", fontsize=9, framealpha=0.9)
 
     out_path = args.o or "dag_block0.png"
     fig.tight_layout()
